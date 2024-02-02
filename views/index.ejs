@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+    <title>WeatherApp</title>
+  </head>
+  <body>
+    <div class="whole-content">
+    
+      <div class="weather-container">
+    <h1>WeatherApp</h1>
+        <form action="/showCityWeather" method="post">
+          <input type="text" placeholder="City name"  name="city" id="city_input">
+          <button type="submit"><img  src="images/search.png" alt="search button"></button>
+        </form>
+        <% if(data.weather[0].main === 'Clouds' ) { %>
+          <img src="images/clouds.png" alt="" class="weather-icon" >               
+          <% } else if (data.weather[0].main === 'Clear') { %>
+       <img src="images/clear.png" alt="" class="weather-icon">               
+       <% } else if (data.weather[0].main === 'Drizzle') { %>
+        <img src="images/drizzle.png" alt="" class="weather-icon">               
+       <% } else if (data.weather[0].main === 'Mist' || data.weather[0].main === 'Smoke') { %>
+        <img src="images/mist.png" alt="" class="weather-icon">               
+        <% } else if (data.weather[0].main === 'Rain') { %>
+          <img src="images/rain.png" alt="" class="weather-icon">               
+          <% } %>
+          
+          
+          <h1 ><%= data.name %></h1>
+        <div class="tempWithDesc">
+            <h2 ><%= data.main.temp %><sup>o</sup>C</h2>
+            <h2 ><%= data.weather[0].description %></h2>
+          </div>
+          <div class="weather-details">
+            <span class="first-part">
+              <p >Longitude: <%= data.coord.lon %></p>
+              <p >Latitude: <%= data.coord.lat %></p>
+              <p >Feels-like: <%= data.main.feels_like %><sup>o</sup>C</p>
+              <p >Humidity: <%= data.main.humidity %> % </p>
+            </span>
+            <span class="second-part">
+              <p >Pressure: <%= data.main.pressure %> hPa</p>
+            <p >Wind speed: <%= data.wind.speed %> m/s</p>
+            <p >Country code: <%= data.sys.country %></p>
+            <p>Rain volume(last 3 hours):<%= data.rain %> </p>
+          </span>
+          
+          
+        </div>
+        <div class="image-src-container">
+      Click
+          <a href="<%= image.urls.regular %>"  target="_blank" > here </a>to take a look at the city
+        </div>
+      </div>
+
+
+        <div id="map"></div>
+      </div>  
+
+
+
+
+
+        <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+        <script>
+          
+          
+          mapboxgl.accessToken = '<%= MAPBOX_ACCESS_TOKEN %>';
+          let map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: ['<%= data.coord.lon %>','<%= data.coord.lat %>'],
+            zoom: 9
+          });
+          
+          
+        </script>
+        
+       
+</body>
+</html>
